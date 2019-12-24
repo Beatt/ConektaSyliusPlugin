@@ -6,6 +6,12 @@ imports:
 
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
 
+winzou_state_machine:
+  sylius_order_checkout:
+    transitions:
+      select_shipping:
+        to: payment_selected
+
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'
 
