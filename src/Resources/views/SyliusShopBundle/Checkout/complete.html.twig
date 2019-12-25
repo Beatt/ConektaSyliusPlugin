@@ -1,0 +1,76 @@
+{% extends '@SyliusShop/Checkout/layout.html.twig' %}
+
+{% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+
+{% block content %}
+    {% include '@SyliusShop/Checkout/_steps.html.twig' with {'active': 'complete', 'orderTotal': order.total} %}
+
+    {{ sonata_block_render_event('sylius.shop.checkout.complete.after_steps', {'order': order}) }}
+
+    <div class="ui padded segment">
+        {% include '@SyliusShop/Checkout/Complete/_header.html.twig' %}
+
+        {{ sonata_block_render_event('sylius.shop.checkout.complete.after_content_header', {'order': order}) }}
+
+        {% include '@SyliusShop/_flashes.html.twig' %}
+
+        {{ form_start(form, {'action': path('sylius_shop_checkout_complete'), 'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate'}}) }}
+        {{ form_errors(form) }}
+        <input type="hidden" name="_method" value="PUT" />
+
+        {{ sonata_block_render_event('sylius.shop.checkout.complete.before_summary', {'order': order, 'form': form}) }}
+
+        {% include '@SyliusShop/Common/Order/_summary.html.twig' %}
+
+        {{ sonata_block_render_event('sylius.shop.checkout.complete.after_summary', {'order': order}) }}
+
+        <div class="ui hidden divider"></div>
+
+
+        {{ sonata_block_render_event('sylius.shop.checkout.complete.before_navigation', {'order': order}) }}
+
+        {% include '@SyliusShop/Checkout/Complete/_navigation.html.twig' %}
+
+        <div class="ui unmargined segments">
+            {% for payment_form in form.payments %}
+            <div class="ui segment">
+                <div class="ui dividing header">{{ 'sylius.ui.payment'|trans }} #{{ loop.index }}</div>
+                <div class="ui fluid stackable items">
+                    {{ form_errors(payment_form.method) }}
+
+                    {% for key, choice_form in payment_form.method %}
+                        <div class="item">
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    {{ form_widget(choice_form) }}
+                                </div>
+                            </div>
+                            <div class="content">
+                                <a class="header">{{ form_label(choice_form) }}</a>
+                                {% if payment_form.method.vars.choices[key].data.description is not null %}
+                                    <div class="description">
+                                        <p>{{ payment_form.method.vars.choices[key].data.description }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        {% include '@SyliusShop/Checkout/SelectPayment/_unavailable.html.twig' %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                    {% include '@SyliusShop/Checkout/SelectPayment/_unavailable.html.twig' %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <input type="hidden" name="conektaToken" value="token_">
+        {{ form_row(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        document.cookie = "conektaToken=token_";
+      })
+    </script>
+{% endblock %}

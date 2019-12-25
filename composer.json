@@ -1,13 +1,13 @@
 {
-    "name": "sylius/plugin-skeleton",
+    "name": "lius/sylius-conekta-plugin",
     "type": "sylius-plugin",
     "keywords": ["sylius", "sylius-plugin"],
-    "description": "Acme example plugin for Sylius.",
+    "description": "Plugin allowing to used conekta as payment provider.",
     "license": "MIT",
     "require": {
         "php": "^7.2",
-
-        "sylius/sylius": "^1.4"
+        "sylius/sylius": "^1.4",
+        "conekta/conekta-php": "^4.0"
     },
     "require-dev": {
         "behat/behat": "^3.4",
@@ -44,8 +44,8 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Acme\\SyliusExamplePlugin\\": "src/",
-            "Tests\\Acme\\SyliusExamplePlugin\\": "tests/"
+            "Lius\\SyliusConektaPlugin\\": "src/",
+            "Tests\\Lius\\SyliusConektaPlugin\\": "tests/"
         }
     },
     "autoload-dev": {

@@ -1,13 +1,14 @@
 <?php
-
 declare(strict_types=1);
 
-namespace Acme\SyliusExamplePlugin\Controller;
+namespace Lius\SyliusConektaPlugin\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Lius\SyliusConektaPlugin\Entity\Payment;
+use Sylius\Component\Core\OrderCheckoutTransitions;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GreetingController extends Controller
+final class GreetingController extends AbstractController
 {
     /**
      * @param string|null $name
@@ -16,7 +17,37 @@ final class GreetingController extends Controller
      */
     public function staticallyGreetAction(?string $name): Response
     {
-        return $this->render('@AcmeSyliusExamplePlugin/static_greeting.html.twig', ['greeting' => $this->getGreeting($name)]);
+        $order = $this->get('sylius.context.cart')->getCart();
+
+        /** @var Payment $payment */
+        $payment = $this->get('sylius.repository.payment')->findOneBy(['order' => $order->getId()]);
+
+        $method = $this->get('sylius.repository.payment_method')->find(3);
+        $payment->setMethod($method);
+
+        $stateMachineFactory = $this->get('sm.factory');
+
+
+        // Order payment event
+//        $stateMachinePayment = $stateMachineFactory->get($order, OrderPaymentTransitions::GRAPH);
+//        $stateMachinePayment->apply(OrderPaymentTransitions::TRANSITION_REQUEST_PAYMENT);
+//        $stateMachinePayment->apply(OrderPaymentTransitions::TRANSITION_PAY);
+
+
+        $stateMachineCheckout = $stateMachineFactory->get($order, OrderCheckoutTransitions::GRAPH);
+        $stateMachineCheckout->apply(OrderCheckoutTransitions::TRANSITION_ADDRESS);
+        $stateMachineCheckout->apply(OrderCheckoutTransitions::TRANSITION_SELECT_SHIPPING);
+        $stateMachineCheckout->apply(OrderCheckoutTransitions::TRANSITION_SELECT_PAYMENT);
+        $stateMachineCheckout->apply(OrderCheckoutTransitions::TRANSITION_COMPLETE);
+
+
+        $this->container->get('sylius.manager.order')->flush();
+
+        return $this->render('@SyliusShop/Order/thankYou.html.twig',
+            [
+                'order' => $order
+            ]
+        );
     }
 
     /**

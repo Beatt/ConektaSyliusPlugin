@@ -2,6 +2,60 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <!-- Put your services here -->
+        <service id="app.sylius_payment"
+                 class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder"
+        >
+            <argument>Lius\SyliusConektaPlugin\Payum\SyliusPaymentGatewayFactory</argument>
+            <tag name="payum.gateway_factory_builder"
+                 factory="sylius_payment"
+            />
+        </service>
+
+        <service id="Lius\SyliusConektaPlugin\Form\Type\SyliusGatewayConfigurationType">
+            <tag name="sylius.gateway_configuration_type"
+                 type="sylius_payment"
+                 label="Sylius Payment"
+            />
+            <tag name="form.type"/>
+        </service>
+
+        <service id="Lius\SyliusConektaPlugin\Conekta\ConektaClient">
+            <argument key="$apiKey">some</argument>
+        </service>
+
+        <service id="Lius\SyliusConektaPlugin\Service\CheckoutCompleteService">
+            <argument>@Sylius\Component\Order\Context\CartContextInterface</argument>
+            <argument>@SM\Factory\AbstractFactory</argument>
+        </service>
+
+        <service id="Lius\SyliusConektaPlugin\Payum\Action\CaptureAction" public="true">
+            <argument type="service"
+                      id="Lius\SyliusConektaPlugin\Conekta\ConektaClient"
+            />
+            <argument type="service"
+                      id="request_stack"
+            />
+            <tag name="payum.action"
+                 factory="sylius_payment"
+                 alias="payum.action.capture"
+             />
+        </service>
+
+        <service id="sylius.form.type.payment_method_translation"
+                 class="Lius\SyliusConektaPlugin\Form\Extension\PaymentMethodTranslationTypeExtension"
+        >
+            <tag name="form.type_extension"
+                 extended_type="Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodTranslationType"
+            />
+        </service>
+
+        <service id="sylius.form.type.complete_type"
+                 class="Lius\SyliusConektaPlugin\Form\Extension\CompleteTypeExtension"
+        >
+            <tag name="form.type_extension"
+                 extended_type="Sylius\Bundle\CoreBundle\Form\Type\Checkout\CompleteType"
+            />
+        </service>
+
     </services>
 </container>
