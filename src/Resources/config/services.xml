@@ -19,41 +19,39 @@
             <tag name="form.type"/>
         </service>
 
-        <service id="Lius\SyliusConektaPlugin\Conekta\ConektaClient">
-            <argument key="$apiKey">some</argument>
-        </service>
-
         <service id="Lius\SyliusConektaPlugin\Service\CheckoutCompleteService">
             <argument>@Sylius\Component\Order\Context\CartContextInterface</argument>
             <argument>@SM\Factory\AbstractFactory</argument>
         </service>
 
         <service id="Lius\SyliusConektaPlugin\Payum\Action\CaptureAction" public="true">
-            <argument type="service"
-                      id="Lius\SyliusConektaPlugin\Conekta\ConektaClient"
-            />
-            <argument type="service"
-                      id="request_stack"
-            />
             <tag name="payum.action"
                  factory="sylius_payment"
                  alias="payum.action.capture"
              />
         </service>
 
-        <service id="sylius.form.type.payment_method_translation"
+        <!--<service id="sylius.form.type.payment_method_translation"
                  class="Lius\SyliusConektaPlugin\Form\Extension\PaymentMethodTranslationTypeExtension"
         >
             <tag name="form.type_extension"
                  extended_type="Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodTranslationType"
             />
-        </service>
+        </service>-->
 
         <service id="sylius.form.type.complete_type"
                  class="Lius\SyliusConektaPlugin\Form\Extension\CompleteTypeExtension"
         >
             <tag name="form.type_extension"
                  extended_type="Sylius\Bundle\CoreBundle\Form\Type\Checkout\CompleteType"
+            />
+        </service>
+
+        <service id="sylius.form.type.payment_type"
+                 class="Lius\SyliusConektaPlugin\Form\Extension\PaymentTypeExtension"
+        >
+            <tag name="form.type_extension"
+                 extended_type="Sylius\Bundle\CoreBundle\Form\Type\Checkout\PaymentType"
             />
         </service>
 

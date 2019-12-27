@@ -9,7 +9,7 @@ use Sylius\Component\Payment\Model\PaymentInterface;
 
 class PaymentSpec extends ObjectBehavior
 {
-    function it_is_sylius_payment(): void
+    /*function it_is_sylius_payment(): void
     {
         $this->shouldHaveType(Payment::class);
     }
@@ -25,5 +25,5 @@ class PaymentSpec extends ObjectBehavior
 
         $this->setConektaToken('token_');
         $this->getConektaToken()->shouldReturn('token_');
-    }
+    }*/
 }

@@ -2,23 +2,23 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 
 #MOSTRAR EN DOCUMENTACIÓN
-#imports:
-#  - { resource: "@AcmeSyliusExamplePlugin/Resources/config/config.yml" }
+imports:
+  - { resource: "@LiusSyliusConektaPlugin/Resources/config/config.yml" }
 
 parameters:
     locale: en_US
 
 services:
-    Lius\SyliusConektaPlugin\Form\Extension\PaymentMethodTranslationTypeExtension:
-      tags:
-        - { name: form.type_extension, extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodTranslationType }
+#    Lius\SyliusConektaPlugin\Form\Extension\PaymentMethodTranslationTypeExtension:
+#      tags:
+#        - { name: form.type_extension, extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodTranslationType }
 
     Lius\SyliusConektaPlugin\Form\Extension\PaymentTypeExtension:
       tags:
         - { name: form.type_extension, extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\PaymentType }
-
-    Sylius\Bundle\UiBundle\Block\BlockEventListener:
-      arguments:
-        - 'block.html.twig'
-      tags:
-        - { name: kernel.event_listener, event: sonata.block.event.sylius.shop.checkout.select_payment.before_navigation, method: onBlockEvent }
+#
+#    Sylius\Bundle\UiBundle\Block\BlockEventListener:
+#      arguments:
+#        - 'block.html.twig'
+#      tags:
+#        - { name: kernel.event_listener, event: sonata.block.event.sylius.shop.checkout.select_payment.before_navigation, method: onBlockEvent }

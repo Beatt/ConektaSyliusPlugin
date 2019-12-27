@@ -8,14 +8,19 @@ use Conekta\Order;
 
 class ConektaClient implements IConektaClient
 {
-    public function __construct(string $apiKey)
+    private function __construct(string $apiKey)
     {
-        if(is_null($apiKey)) {
+        if(is_null($apiKey) || empty(trim($apiKey))) {
             throw new \InvalidArgumentException("The api key is required");
         }
         Conekta::$apiKey = $apiKey;
         Conekta::$plugin = 'Integration Conekta payment into Sylius';
         Conekta::$pluginVersion = '0.0.1';
+    }
+
+    public static function create(string $privateKey)
+    {
+        return new ConektaClient($privateKey);
     }
 
     public function orderProcess(array $order): Order

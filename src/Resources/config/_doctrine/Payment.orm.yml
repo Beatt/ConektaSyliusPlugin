@@ -1,6 +1,6 @@
-#Lius\SyliusConektaPlugin\Entity\Payment:
-#  type: entity
-#  table: sylius_payment
-#  fields:
-#    conektaToken:
-#      type: string
+Lius\SyliusConektaPlugin\Entity\Payment:
+  type: entity
+  table: sylius_payment
+  fields:
+    creditCardToken:
+      type: string
