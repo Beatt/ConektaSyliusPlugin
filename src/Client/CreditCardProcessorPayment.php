@@ -24,6 +24,7 @@ class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
 
         $this->addCustomer($order, $response);
         $this->addLineItems($order, $payment);
+        $this->addShippingContact($order, $payment);
         $this->addCharge($order, $creditCardToken);
 
         return $this->commit($order, $response);
@@ -80,5 +81,23 @@ class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
     {
         $response['status'] = $conektaOrder->payment_status;
         $response['orderId'] = $conektaOrder->id;
+    }
+
+    private function addShippingContact(array &$order, PaymentInterface $payment)
+    {
+        $shippingContact = [];
+        $shippingContact['receiver'] = $payment->getOrder()->getShippingAddress()->getFullName();
+        $this->addAddress($shippingContact, $payment);
+        $order['shipping_contact'] = $shippingContact;
+    }
+
+    private function addAddress(array &$shippingContact, PaymentInterface $payment)
+    {
+        $address = [];
+        $address['street1'] = $payment->getOrder()->getShippingAddress()->getStreet();
+        $address['postal_code'] = $payment->getOrder()->getShippingAddress()->getPostcode();
+        $address['state'] = $payment->getOrder()->getShippingAddress()->getCity();
+        $address['country'] = self::COUNTRY;
+        $shippingContact['address'] = $address;
     }
 }

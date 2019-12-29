@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Lius\SyliusConektaPlugin\Payum\Action;
 
-use Conekta\Customer;
 use Lius\SyliusConektaPlugin\Client\ConektaClientInterface;
-use Lius\SyliusConektaPlugin\Client\CreditCardProcessorPayment;
 use Lius\SyliusConektaPlugin\Client\ProcessorPaymentConektaInterface;
 use Lius\SyliusConektaPlugin\Entity\PaymentInterface;
 use Lius\SyliusConektaPlugin\Payum\ConektaApiClient;
@@ -41,21 +39,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface
 
         /** @var PaymentInterface $payment */
         $payment = $request->getModel();
-
-        //$customer = new Customer('cus_2kahYMoono38An8Qs');
-
-        /*$conektaOrder = $this->conektaClient->placeOrder(
-            $customer,
-            $lineItems,
-            [
-                [
-                    'payment_method' => [
-                        'type' => 'card',
-                        'token_id' => $this->session->get('conektaToken')
-                    ]
-                ]
-            ]
-        );*/
 
         $result = $this->conektaClient->processCreditCardPayment(
             $this->processorPaymentConekta,

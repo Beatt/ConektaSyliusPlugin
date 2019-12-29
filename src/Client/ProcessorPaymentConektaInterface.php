@@ -8,6 +8,7 @@ use Sylius\Component\Core\Model\PaymentInterface;
 interface ProcessorPaymentConektaInterface
 {
     public const CURRENCY = 'MXN';
+    public const COUNTRY = 'MX';
 
     public function processPayment(PaymentInterface $payment, string $creditCardToken);
 }
