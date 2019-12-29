@@ -7,7 +7,4 @@ use Sylius\Component\Core\Model\PaymentInterface as BasePaymentInterface;
 
 interface PaymentInterface extends BasePaymentInterface
 {
-    public function getCreditCardToken(): ?string;
-
-    public function setCreditCardToken(string $creditCardToken = null): void;
 }

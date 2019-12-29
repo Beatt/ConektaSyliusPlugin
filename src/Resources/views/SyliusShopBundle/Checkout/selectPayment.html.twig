@@ -42,7 +42,7 @@
                                 {% else %}
                                     {% include '@SyliusShop/Checkout/SelectPayment/_unavailable.html.twig' %}
                                 {% endfor %}
-                                <input type="text" value="TOKEN" name="{{ payment_form.creditCardToken.vars.full_name }}">
+                                <input type="text" value="tok_test_visa_4242" name="{{ payment_form.conektaToken.vars.full_name }}">
                             </div>
                     {% else %}
                         {% include '@SyliusShop/Checkout/SelectPayment/_unavailable.html.twig' %}

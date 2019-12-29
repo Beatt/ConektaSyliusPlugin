@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Lius\SyliusConektaPlugin\Payum;
 
+use Lius\SyliusConektaPlugin\Client\ConektaClient;
 use Lius\SyliusConektaPlugin\Payum\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
@@ -17,9 +18,9 @@ class SyliusPaymentGatewayFactory extends GatewayFactory
             'payum.action.status' => new StatusAction()
         ]);
 
-
         $config['payum.api'] = function(ArrayObject $config) {
-            return new SyliusApi($config['api_key']);
+            $conektaClient = ConektaClient::initialize($config['api_key']);
+            return new ConektaApiClient($conektaClient);
         };
     }
 }

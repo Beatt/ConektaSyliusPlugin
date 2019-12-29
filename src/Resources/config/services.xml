@@ -2,6 +2,7 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+
         <service id="app.sylius_payment"
                  class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder"
         >
@@ -29,6 +30,8 @@
                  factory="sylius_payment"
                  alias="payum.action.capture"
              />
+            <argument type="service" id="session"/>
+            <argument type="service" id="Lius\SyliusConektaPlugin\Client\CreditCardProcessorPayment"/>
         </service>
 
         <!--<service id="sylius.form.type.payment_method_translation"
@@ -53,6 +56,15 @@
             <tag name="form.type_extension"
                  extended_type="Sylius\Bundle\CoreBundle\Form\Type\Checkout\PaymentType"
             />
+            <argument type="service" id="session"/>
+        </service>
+
+        <service id="Lius\SyliusConektaPlugin\Client\Service\CustomerConektaService" public="true">
+            <argument type="service" id="sylius.context.customer"/>
+        </service>
+
+        <service id="Lius\SyliusConektaPlugin\Client\CreditCardProcessorPayment">
+            <argument type="service" id="Lius\SyliusConektaPlugin\Client\Service\CustomerConektaService"/>
         </service>
 
     </services>

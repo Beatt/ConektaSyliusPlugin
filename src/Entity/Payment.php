@@ -12,18 +12,4 @@ use Sylius\Component\Core\Model\Payment as BasePayment;
  */
 class Payment extends BasePayment implements PaymentInterface
 {
-    /**
-     * @ORM\Column(name="credit_card_token", type="string", nullable=true)
-     */
-    private $creditCardToken;
-
-    public function getCreditCardToken(): ?string
-    {
-        return $this->creditCardToken;
-    }
-
-    public function setCreditCardToken(string $creditCardToken = null): void
-    {
-        $this->creditCardToken = $creditCardToken;
-    }
 }
