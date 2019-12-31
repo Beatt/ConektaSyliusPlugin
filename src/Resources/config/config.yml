@@ -1,5 +1,5 @@
-sylius_payment:
+sylius_customer:
   resources:
-    payment:
+    customer:
       classes:
-        model: Lius\SyliusConektaPlugin\Entity\Payment
+        model: Lius\SyliusConektaPlugin\Entity\Customer

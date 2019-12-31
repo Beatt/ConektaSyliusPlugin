@@ -7,6 +7,7 @@ use Conekta\Order;
 use Lius\SyliusConektaPlugin\Client\Service\CustomerConektaService;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
+use Sylius\Component\Customer\Model\CustomerInterface;
 
 class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
 {
@@ -22,7 +23,7 @@ class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
         $response = [];
         $order = ['currency' => self::CURRENCY];
 
-        $this->addCustomer($order, $response);
+        $this->addCustomer($order, $response, $payment->getOrder()->getCustomer());
         $this->addLineItems($order, $payment);
         $this->addShippingContact($order, $payment);
         $this->addCharge($order, $creditCardToken);
@@ -30,9 +31,11 @@ class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
         return $this->commit($order, $response);
     }
 
-    private function addCustomer(array &$order, array &$response): void
+    private function addCustomer(array &$order, array &$response, ?CustomerInterface $customer): void
     {
-        $customerConekta = $this->customerConektaService->getConektaCustomer();
+        $customerConekta = $this->customerConektaService->getConektaCustomerById(
+            $customer->getCustomerIdPaymentGateway()
+        );
         $customerInfo = [];
         $customerInfo['customer_id'] = $customerConekta->id;
 
@@ -70,19 +73,6 @@ class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
         $charge['payment_method'] = $paymentMethod;
     }
 
-    private function commit(array $order, array $response): array
-    {
-        $conektaOrder = Order::create($order);
-        $this->assignResponseValues($response, $conektaOrder);
-        return $response;
-    }
-
-    private function assignResponseValues(array &$response, Order $conektaOrder): void
-    {
-        $response['status'] = $conektaOrder->payment_status;
-        $response['orderId'] = $conektaOrder->id;
-    }
-
     private function addShippingContact(array &$order, PaymentInterface $payment)
     {
         $shippingContact = [];
@@ -99,5 +89,18 @@ class CreditCardProcessorPayment implements ProcessorPaymentConektaInterface
         $address['state'] = $payment->getOrder()->getShippingAddress()->getCity();
         $address['country'] = self::COUNTRY;
         $shippingContact['address'] = $address;
+    }
+
+    private function commit(array $order, array $response): array
+    {
+        $conektaOrder = Order::create($order);
+        $this->assignResponseValues($response, $conektaOrder);
+        return $response;
+    }
+
+    private function assignResponseValues(array &$response, Order $conektaOrder): void
+    {
+        $response['status'] = $conektaOrder->payment_status;
+        $response['orderId'] = $conektaOrder->id;
     }
 }

@@ -5,12 +5,12 @@ namespace Lius\SyliusConektaPlugin\Payum\Action;
 
 use Lius\SyliusConektaPlugin\Client\ConektaClientInterface;
 use Lius\SyliusConektaPlugin\Client\ProcessorPaymentConektaInterface;
-use Lius\SyliusConektaPlugin\Entity\PaymentInterface;
 use Lius\SyliusConektaPlugin\Payum\ConektaApiClient;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentInterface as SyliusPaymentInterface;
 use Payum\Core\Request\Capture;
 use Symfony\Component\HttpFoundation\Session\Session;

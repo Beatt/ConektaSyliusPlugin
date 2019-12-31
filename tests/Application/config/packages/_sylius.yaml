@@ -6,6 +6,8 @@ imports:
 
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
 
+#    - { resource: "@LiusSyliusConektaPlugin/Resources/config/config.yml" }
+
 #winzou_state_machine:
 #  sylius_order_checkout:
 #    transitions:

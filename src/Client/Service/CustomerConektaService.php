@@ -14,16 +14,24 @@ final class CustomerConektaService
         $this->customerContext = $context->getCustomer();
     }
 
-    public function getConektaCustomer(): Customer
+    public function getConektaCustomerById(?string $id): Customer
     {
-        return Customer::create([
+        if($id !== null) {
+            return $this->updateConektaCustomer($id);
+        }
+
+        $customer = Customer::create([
             'name' => $this->customerContext->getFirstName(),
             'email' => $this->customerContext->getEmail(),
             'phone' => $this->customerContext->getPhoneNumber(),
         ]);
+
+        $this->customerContext->setCustomerIdPaymentGateway($customer->id);
+
+        return $customer;
     }
 
-    public function updateConektaCustomer(string $id): Customer
+    private function updateConektaCustomer(string $id): Customer
     {
         $customer = Customer::find($id);
         return $customer->update([
